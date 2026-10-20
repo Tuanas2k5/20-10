@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="vi" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thiệp Chúc Mừng 20/10 - Câu lạc bộ Sinh viên 5 Tốt</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Cinzel:wght@600;700&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        script: ['"Dancing Script"', 'cursive'],
+                        sans: ['"Be Vietnam Pro"', 'sans-serif'],
+                        cinzel: ['"Cinzel"', 'serif'],
+                    },
+                    colors: {
+                        gold: {
+                            100: '#fef9c3',
+                            300: '#fde047',
+                            400: '#facc15',
+                            500: '#eab308',
+                            600: '#ca8a04',
+                        },
+                        rose: {
+                            50: '#fff1f2',
+                            100: '#ffe4e6',
+                            200: '#fecdd3',
+                            300: '#fda4af',
+                            400: '#fb7185',
+                            500: '#f43f5e',
+                            600: '#e11d48',
+                            900: '#881337',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Keyframe Animations & Styles */
+        body {
+            background: linear-gradient(135deg, #1f0814 0%, #3b0a21 35%, #58112c 70%, #2a0818 100%);
+            overflow-x: hidden;
+        }
+
+        /* Gold Gradient Text */
+        .text-gold-gradient {
+            background: linear-gradient(135deg, #ffe599 0%, #d4af37 50%, #aa7c11 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .border-gold-gradient {
+            border-image: linear-gradient(to right, #fde047, #f43f5e, #fde047) 1;
+        }
+
+        /* Glassmorphism Panel */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            box-shadow: 0 25px 50px -12px rgba(225, 29, 72, 0.25), 0 0 30px rgba(251, 113, 133, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+        }
+
+        .glass-badge {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+
+        /* Envelope 3D Effects */
+        .perspective-1000 {
+            perspective: 1200px;
+        }
+
+        .envelope-wrapper {
+            transform-style: preserve-3d;
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .envelope-flap {
+            transform-origin: top;
+            transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1) 0.1s, z-index 0.2s 0.3s;
+        }
+
+        .envelope-wrapper.open .envelope-flap {
+            transform: rotateX(-180deg);
+            z-index: 1;
+        }
+
+        .card-inside {
+            transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s, opacity 0.5s ease;
+        }
+
+        .envelope-wrapper.open .card-inside {
+            transform: translateY(-120px) scale(1.02);
+            opacity: 1;
+        }
+
+        /* Glow effects */
+        .glow-button {
+            box-shadow: 0 0 20px rgba(244, 63, 94, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .glow-button:hover {
+            box-shadow: 0 0 30px rgba(244, 63, 94, 0.7), 0 0 15px rgba(250, 204, 21, 0.5);
+            transform: translateY(-2px);
+        }
+
+        /* Pulse glow animation */
+        @keyframes subtleGlow {
+            0%, 100% { opacity: 0.6; transform: scale(1); }
+            50% { opacity: 0.9; transform: scale(1.05); }
+        }
+
+        .animate-subtle-glow {
+            animation: subtleGlow 4s infinite ease-in-out;
+        }
+
+        /* Ribbon Seal Shimmer */
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        .shimmer-bg {
+            background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 100%);
+            background-size: 200% 100%;
+            animation: shimmer 3s infinite;
+        }
+    </style>
+</head>
+<body class="min-h-screen text-slate-800 font-sans relative flex flex-col justify-between items-center py-6 px-4 select-none">
+
+    <!-- Interactive Canvas Background for Falling Petals & Sparkles -->
+    <canvas id="bgCanvas" class="fixed inset-0 pointer-events-auto z-0"></canvas>
+    <!-- Canvas for Flowers / Hearts Confetti Explosion -->
+    <canvas id="confettiCanvas" class="fixed inset-0 pointer-events-none z-50"></canvas>
+
+    <!-- Top Music Controller Button -->
+    <div class="fixed top-4 right-4 z-40">
+        <button id="musicToggleBtn" class="flex items-center gap-2 px-4 py-2.5 rounded-full glass-badge text-white font-medium hover:bg-white/30 transition-all duration-300 shadow-lg border border-pink-300/40 text-sm">
+            <i id="musicIcon" class="fa-solid fa-music text-pink-300 animate-bounce"></i>
+            <span id="musicText">Phát nhạc 🎶</span>
+        </button>
+    </div>
+
+    <!-- Notification Toast Modal -->
+    <div id="toast" class="fixed top-6 left-1/2 -translate-x-1/2 z-50 transform -translate-y-20 opacity-0 transition-all duration-500 ease-out pointer-events-none">
+        <div class="bg-gradient-to-r from-rose-600 to-pink-600 text-white px-6 py-3 rounded-full shadow-2xl border border-pink-300/50 flex items-center gap-3">
+            <i id="toastIcon" class="fa-solid fa-circle-check text-yellow-300 text-lg"></i>
+            <span id="toastMsg" class="font-medium text-sm">Đã sao chép lời chúc!</span>
+        </div>
+    </div>
+
+    <!-- MAIN CONTAINER -->
+    <main class="relative z-10 w-full max-w-4xl mx-auto flex flex-col items-center justify-center my-auto py-4">
+
+        <!-- HEADER / CLUB BADGE -->
+        <header class="text-center mb-6 transform transition-all duration-500">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-rose-950/60 border border-amber-400/40 text-amber-300 text-xs sm:text-sm font-semibold tracking-wider uppercase mb-3 shadow-inner">
+                <i class="fa-solid fa-star text-amber-400 text-xs"></i>
+                <span>CÂU LẠC BỘ SINH VIÊN 5 TỐT</span>
+                <i class="fa-solid fa-star text-amber-400 text-xs"></i>
+            </div>
+            <h1 class="font-script text-4xl sm:text-5xl md:text-6xl font-bold text-rose-100 drop-shadow-[0_4px_12px_rgba(225,29,72,0.8)] tracking-wide">
+                Chúc Mừng Ngày Phụ Nữ Việt Nam
+            </h1>
+            <div class="text-2xl sm:text-3xl font-cinzel font-bold text-gold-gradient mt-1 tracking-widest">
+                20 • 10
+            </div>
+        </header>
+
+        <!-- ENVELOPE / CARD INTERACTIVE CONTAINER -->
+        <div class="w-full max-w-2xl perspective-1000 my-2">
+            
+            <!-- ENVELOPE BOX -->
+            <div id="envelopeWrapper" class="envelope-wrapper relative w-full cursor-pointer group">
+                
+                <!-- Envelope Back Face -->
+                <div id="envelopeContainer" class="relative w-full glass-card rounded-3xl p-4 sm:p-8 md:p-10 border-2 border-pink-300/60 transition-all duration-500 shadow-[0_20px_60px_rgba(0,0,0,0.5)]">
+                    
+                    <!-- Decorative Ribbon Line -->
+                    <div class="absolute inset-x-0 top-0 h-2 bg-gradient-to-r from-amber-300 via-rose-500 to-amber-300 rounded-t-3xl"></div>
+
+                    <!-- SEAL / FLAP INTERACTIVE OVERLAY (Visible before opening) -->
+                    <div id="envelopeCover" class="flex flex-col items-center justify-center py-12 px-4 text-center space-y-6 transition-all duration-500">
+                        <!-- Golden Wax Seal Badge -->
+                        <div class="relative group-hover:scale-110 transition-transform duration-300">
+                            <div class="absolute -inset-3 rounded-full bg-gradient-to-r from-amber-400 to-rose-500 opacity-70 blur-md animate-pulse"></div>
+                            <div class="relative w-24 h-24 rounded-full bg-gradient-to-br from-amber-300 via-rose-600 to-amber-600 p-1 shadow-2xl flex items-center justify-center">
+                                <div class="w-full h-full rounded-full bg-rose-900 border-2 border-amber-300/80 flex flex-col items-center justify-center text-amber-300 shadow-inner">
+                                    <i class="fa-solid fa-heart text-2xl text-rose-400 mb-0.5 animate-bounce"></i>
+                                    <span class="font-cinzel text-xs font-bold tracking-tighter">SV5T</span>
+                                    <span class="text-[10px] text-amber-200">20/10</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <p class="font-script text-2xl text-rose-800 font-semibold mb-1">Thiệp Chúc Mừng Dành Tặng</p>
+                            <h3 class="font-bold text-slate-800 text-lg sm:text-xl">Các Nữ Thành Viên Câu Lạc Bộ Sinh Viên 5 Tốt</h3>
+                        </div>
+
+                        <div class="pt-2">
+                            <span class="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-gradient-to-r from-rose-500 to-pink-600 text-white font-medium text-sm shadow-lg group-hover:shadow-rose-500/50 transition-all duration-300">
+                                <i class="fa-solid fa-envelope-open-text"></i>
+                                <span>Chạm để mở thiệp 💌</span>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- INNER GREETING CARD CONTENT (Revealed when opened) -->
+                    <div id="cardContent" class="hidden opacity-0 transition-all duration-700 space-y-6 text-slate-800 text-justify leading-relaxed">
+                        
+                        <!-- Header Banner in Card -->
+                        <div class="text-center pb-4 border-b border-rose-200/80">
+                            <span class="text-xs uppercase tracking-widest text-rose-600 font-semibold">Thư chúc mừng chính thức</span>
+                            <h2 class="font-script text-3xl sm:text-4xl font-bold text-rose-700 mt-1">Thân gửi các nữ thành viên,</h2>
+                            <p class="text-xs text-rose-800/70 font-medium italic mt-0.5">của Câu lạc bộ Sinh viên 5 Tốt</p>
+                        </div>
+
+                        <!-- Main Paragraphs -->
+                        <div class="space-y-4 text-sm sm:text-base font-normal text-slate-700">
+                            <p class="first-letter:text-3xl first-letter:font-bold first-letter:text-rose-600 first-letter:mr-1">
+                                Nhân ngày Phụ nữ Việt Nam 20/10, Ban Chủ nhiệm Câu lạc bộ Sinh viên 5 Tốt xin gửi những lời chúc mừng ấm áp và tươi đẹp nhất đến toàn thể các bạn nữ - những bông hoa rạng rỡ và tài năng của mái nhà SV5T.
+                            </p>
+
+                            <p>
+                                Cảm ơn các bạn vì đã luôn mang đến năng lượng tích cực, sự nhiệt huyết và những nụ cười rạng rỡ cho gia đình Sinh viên 5 Tốt. Sự hiện diện của các bạn chính là mảnh ghép tuyệt vời nhất tạo nên sức sống và sự gắn kết cho Câu lạc bộ.
+                            </p>
+
+                            <p>
+                                Nhân ngày đặc biệt này, chúc các bạn luôn xinh đẹp, tự tin, hạnh phúc và tỏa sáng theo cách riêng của mình. Chúc các bạn luôn gặt hái được nhiều thành công trong học tập, duy trì trọn vẹn nhiệt huyết tuổi trẻ và luôn giữ vững tinh thần bản lĩnh của người “Sinh viên 5 Tốt”.
+                            </p>
+
+                            <p class="font-medium text-rose-800 italic text-center py-2 bg-rose-50/80 rounded-2xl border border-rose-100">
+                                "Chúc các bạn có một ngày 20/10 thật trọn vẹn, tràn ngập niềm vui, hoa và những điều dịu dàng nhất!"
+                            </p>
+                        </div>
+
+                        <!-- Card Footer Signoff -->
+                        <div class="pt-6 border-t border-rose-200/80 flex flex-col sm:flex-row justify-between items-center gap-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full bg-rose-100 border border-rose-300 flex items-center justify-center text-rose-600 font-bold font-cinzel text-xs">
+                                    SV5T
+                                </div>
+                                <div class="text-left">
+                                    <p class="text-xs text-slate-500">Đơn vị gửi</p>
+                                    <p class="text-xs font-bold text-slate-800">CLB Sinh viên 5 Tốt</p>
+                                </div>
+                            </div>
+
+                            <div class="text-center sm:text-right">
+                                <p class="text-xs text-slate-500 italic">Trân trọng.,</p>
+                                <p class="font-semibold text-rose-900 text-sm sm:text-base">Ban Chủ nhiệm CLB Sinh viên 5 Tốt</p>
+                            </div>
+                        </div>
+
+                    </div> <!-- End Card Content -->
+
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ACTION BUTTONS TOOLBAR -->
+        <div class="w-full max-w-xl mt-6 grid grid-cols-2 sm:grid-cols-4 gap-3">
+            
+            <!-- Toggle Open/Close Button -->
+            <button id="toggleCardBtn" class="glow-button flex flex-col items-center justify-center p-3 rounded-2xl bg-gradient-to-b from-rose-500 to-rose-600 text-white font-medium text-xs sm:text-sm shadow-md transition-all active:scale-95">
+                <i id="openBtnIcon" class="fa-solid fa-envelope text-lg mb-1"></i>
+                <span id="openBtnText">Mở Thiệp 💌</span>
+            </button>
+
+            <!-- Fire petal confetti button -->
+            <button id="confettiBtn" class="glow-button flex flex-col items-center justify-center p-3 rounded-2xl bg-gradient-to-b from-pink-500 to-rose-500 text-white font-medium text-xs sm:text-sm shadow-md transition-all active:scale-95">
+                <i class="fa-solid fa-wand-magic-sparkles text-lg mb-1 text-amber-200"></i>
+                <span>Tung hoa 🌸</span>
+            </button>
+
+            <!-- Copy text button -->
+            <button id="copyBtn" class="glow-button flex flex-col items-center justify-center p-3 rounded-2xl bg-gradient-to-b from-amber-500 to-amber-600 text-white font-medium text-xs sm:text-sm shadow-md transition-all active:scale-95">
+                <i class="fa-solid fa-copy text-lg mb-1"></i>
+                <span>Sao chép 📋</span>
+            </button>
+
+            <!-- Sound trigger button -->
+            <button id="audioTriggerBtn" class="glow-button flex flex-col items-center justify-center p-3 rounded-2xl bg-gradient-to-b from-purple-600 to-pink-600 text-white font-medium text-xs sm:text-sm shadow-md transition-all active:scale-95">
+                <i class="fa-solid fa-music text-lg mb-1"></i>
+                <span>Âm nhạc 🎶</span>
+            </button>
+
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="relative z-10 text-center text-rose-200/70 text-xs py-3">
+        <p>© 20/10 • Dành trọn yêu thương tới Nữ Sinh Viên 5 Tốt ✨</p>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // --- 1. FULL GREETING TEXT DATA ---
+        const greetingText = `Thân gửi các nữ thành viên của Câu lạc bộ Sinh viên 5 Tốt,
+
+Nhân ngày Phụ nữ Việt Nam 20/10, Ban Chủ nhiệm Câu lạc bộ Sinh viên 5 Tốt xin gửi những lời chúc mừng ấm áp và tươi đẹp nhất đến toàn thể các bạn nữ - những bông hoa rạng rỡ và tài năng của mái nhà SV5T.
+
+Cảm ơn các bạn vì đã luôn mang đến năng lượng tích cực, sự nhiệt huyết và những nụ cười rạng rỡ cho gia đình Sinh viên 5 Tốt. Sự hiện diện của các bạn chính là mảnh ghép tuyệt vời nhất tạo nên sức sống và sự gắn kết cho Câu lạc bộ.
+
+Nhân ngày đặc biệt này, chúc các bạn luôn xinh đẹp, tự tin, hạnh phúc và tỏa sáng theo cách riêng của mình. Chúc các bạn luôn gặt hái được nhiều thành công trong học tập, duy trì trọn vẹn nhiệt huyết tuổi trẻ và luôn giữ vững tinh thần bản lĩnh của người “Sinh viên 5 Tốt”.
+
+Chúc các bạn có một ngày 20/10 thật trọn vẹn, tràn ngập niềm vui, hoa và những điều dịu dàng nhất!
+
+Trân trọng,
+Ban Chủ nhiệm Câu lạc bộ Sinh viên 5 Tốt./.`;
+
+
+        // --- 2. STATE & DOM ELEMENTS ---
+        let isCardOpen = false;
+        const envelopeWrapper = document.getElementById('envelopeWrapper');
+        const envelopeCover = document.getElementById('envelopeCover');
+        const cardContent = document.getElementById('cardContent');
+        const toggleCardBtn = document.getElementById('toggleCardBtn');
+        const openBtnIcon = document.getElementById('openBtnIcon');
+        const openBtnText = document.getElementById('openBtnText');
+        const copyBtn = document.getElementById('copyBtn');
+        const confettiBtn = document.getElementById('confettiBtn');
+        const audioTriggerBtn = document.getElementById('audioTriggerBtn');
+        const musicToggleBtn = document.getElementById('musicToggleBtn');
+        const musicIcon = document.getElementById('musicIcon');
+        const musicText = document.getElementById('musicText');
+
+        // --- 3. CARD TOGGLE LOGIC ---
+        function toggleCard() {
+            isCardOpen = !isCardOpen;
+
+            if (isCardOpen) {
+                // Hide envelope cover & show full text
+                envelopeCover.classList.add('hidden');
+                cardContent.classList.remove('hidden');
+                setTimeout(() => {
+                    cardContent.classList.remove('opacity-0');
+                }, 50);
+
+                openBtnIcon.className = "fa-solid fa-envelope-open text-lg mb-1";
+                openBtnText.textContent = "Đóng Thiệp ✉️";
+                
+                // Trigger burst effect when opening
+                triggerFlowerExplosion();
+                showToast("Đã mở thiệp chúc mừng! 💌", "fa-envelope-open");
+            } else {
+                cardContent.classList.add('opacity-0');
+                setTimeout(() => {
+                    cardContent.classList.add('hidden');
+                    envelopeCover.classList.remove('hidden');
+                }, 300);
+
+                openBtnIcon.className = "fa-solid fa-envelope text-lg mb-1";
+                openBtnText.textContent = "Mở Thiệp 💌";
+            }
+        }
+
+        envelopeWrapper.addEventListener('click', (e) => {
+            if (!isCardOpen) {
+                toggleCard();
+            }
+        });
+
+        toggleCardBtn.addEventListener('click', toggleCard);
+
+
+        // --- 4. COPY TEXT FUNCTIONALITY ---
+        copyBtn.addEventListener('click', () => {
+            // Standard iframe compatible copy fallback
+            const dummyTextArea = document.createElement("textarea");
+            dummyTextArea.value = greetingText;
+            document.body.appendChild(dummyTextArea);
+            dummyTextArea.select();
+            dummyTextArea.setSelectionRange(0, 99999);
+
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    showToast("Đã sao chép lời chúc thành công! 📋", "fa-copy");
+                } else {
+                    showToast("Vui lòng sao chép thủ công!", "fa-circle-exclamation");
+                }
+            } catch (err) {
+                showToast("Lỗi khi sao chép!", "fa-circle-exclamation");
+            }
+            document.body.removeChild(dummyTextArea);
+        });
+
+
+        // --- 5. TOAST NOTIFICATION ---
+        let toastTimeout;
+        function showToast(msg, iconClass = "fa-circle-check") {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toastMsg');
+            const toastIcon = document.getElementById('toastIcon');
+
+            toastMsg.textContent = msg;
+            toastIcon.className = `fa-solid ${iconClass} text-yellow-300 text-lg`;
+
+            toast.classList.remove('-translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('-translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+
+        // --- 6. WEB AUDIO API SOFT MELODY SYNTHESIZER ---
+        let audioCtx = null;
+        let isPlaying = false;
+        let musicTimer = null;
+
+        function toggleMusic() {
+            if (!isPlaying) {
+                startMusic();
+            } else {
+                stopMusic();
+            }
+        }
+
+        function startMusic() {
+            if (!audioCtx) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                audioCtx = new AudioContext();
+            }
+
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+
+            isPlaying = true;
+            musicIcon.className = "fa-solid fa-compact-disc text-pink-300 animate-spin";
+            musicText.textContent = "Tắt nhạc 🎶";
+            showToast("Đang phát giai điệu du dương 🎵", "fa-music");
+
+            // Pentatonic scale notes (Soft dreamy chime tones)
+            const scale = [261.63, 293.66, 329.63, 392.00, 440.00, 523.25, 587.33, 659.25, 783.99, 880.00];
+            let noteIdx = 0;
+
+            function playChime(freq, duration = 2.0, volume = 0.04) {
+                if (!isPlaying || !audioCtx) return;
+
+                try {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+
+                    // Soft attack & long decay envelope
+                    gain.gain.setValueAtTime(0, audioCtx.currentTime);
+                    gain.gain.linearRampToValueAtTime(volume, audioCtx.currentTime + 0.1);
+                    gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + duration);
+                } catch(e) {}
+            }
+
+            // Arpeggio loop
+            musicTimer = setInterval(() => {
+                if (!isPlaying) return;
+                
+                // Random melody note
+                const note = scale[Math.floor(Math.random() * scale.length)];
+                playChime(note, 2.5, 0.05);
+
+                // Occasional bass note
+                if (noteIdx % 3 === 0) {
+                    playChime(scale[noteIdx % 4] / 2, 3.5, 0.03);
+                }
+                noteIdx++;
+            }, 450);
+        }
+
+        function stopMusic() {
+            isPlaying = false;
+            if (musicTimer) clearInterval(musicTimer);
+            musicIcon.className = "fa-solid fa-music text-pink-300";
+            musicText.textContent = "Phát nhạc 🎶";
+            showToast("Đã tắt âm nhạc 🔇", "fa-volume-xmark");
+        }
+
+        musicToggleBtn.addEventListener('click', toggleMusic);
+        audioTriggerBtn.addEventListener('click', toggleMusic);
+
+
+        // --- 7. BACKGROUND CANVAS (Falling Petals & Sparkles) ---
+        const bgCanvas = document.getElementById('bgCanvas');
+        const bgCtx = bgCanvas.getContext('2d');
+
+        let bgWidth = bgCanvas.width = window.innerWidth;
+        let bgHeight = bgCanvas.height = window.innerHeight;
+
+        window.addEventListener('resize', () => {
+            bgWidth = bgCanvas.width = window.innerWidth;
+            bgHeight = bgCanvas.height = window.innerHeight;
+        });
+
+        const mouse = { x: bgWidth / 2, y: bgHeight / 2 };
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        });
+
+        // Petal Object
+        class Petal {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * bgWidth;
+                this.y = -20 - Math.random() * 50;
+                this.size = 8 + Math.random() * 12;
+                this.speedY = 1 + Math.random() * 1.8;
+                this.speedX = -1 + Math.random() * 2;
+                this.rotation = Math.random() * Math.PI * 2;
+                this.rotSpeed = (Math.random() - 0.5) * 0.03;
+                this.opacity = 0.4 + Math.random() * 0.5;
+                this.color = ['#fecdd3', '#fda4af', '#fb7185', '#f43f5e', '#ffe4e6'][Math.floor(Math.random() * 5)];
+            }
+
+            update() {
+                this.y += this.speedY;
+                this.x += this.speedX + Math.sin(this.y * 0.01) * 0.5;
+                this.rotation += this.rotSpeed;
+
+                // Subtle repulsion from mouse
+                const dx = mouse.x - this.x;
+                const dy = mouse.y - this.y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist < 100) {
+                    this.x -= (dx / dist) * 2;
+                }
+
+                if (this.y > bgHeight + 20 || this.x < -20 || this.x > bgWidth + 20) {
+                    this.reset();
+                }
+            }
+
+            draw() {
+                bgCtx.save();
+                bgCtx.translate(this.x, this.y);
+                bgCtx.rotate(this.rotation);
+                bgCtx.globalAlpha = this.opacity;
+                bgCtx.fillStyle = this.color;
+
+                // Draw petal geometry
+                bgCtx.beginPath();
+                bgCtx.moveTo(0, 0);
+                bgCtx.bezierCurveTo(-this.size, -this.size / 2, -this.size, this.size, 0, this.size * 1.5);
+                bgCtx.bezierCurveTo(this.size, this.size, this.size, -this.size / 2, 0, 0);
+                bgCtx.fill();
+
+                bgCtx.restore();
+            }
+        }
+
+        // Sparkle Star Object
+        class Sparkle {
+            constructor() {
+                this.x = Math.random() * bgWidth;
+                this.y = Math.random() * bgHeight;
+                this.size = Math.random() * 2.5;
+                this.alpha = Math.random();
+                this.speed = 0.01 + Math.random() * 0.02;
+            }
+
+            update() {
+                this.alpha += this.speed;
+                if (this.alpha > 1 || this.alpha < 0) {
+                    this.speed = -this.speed;
+                }
+            }
+
+            draw() {
+                bgCtx.save();
+                bgCtx.globalAlpha = Math.max(0, this.alpha);
+                bgCtx.fillStyle = '#fde047';
+                bgCtx.beginPath();
+                bgCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                bgCtx.fill();
+                bgCtx.restore();
+            }
+        }
+
+        const petals = Array.from({ length: 40 }, () => new Petal());
+        const sparkles = Array.from({ length: 60 }, () => new Sparkle());
+
+        function animateBG() {
+            bgCtx.clearRect(0, 0, bgWidth, bgHeight);
+
+            sparkles.forEach(s => {
+                s.update();
+                s.draw();
+            });
+
+            petals.forEach(p => {
+                p.update();
+                p.draw();
+            });
+
+            requestAnimationFrame(animateBG);
+        }
+        animateBG();
+
+
+        // --- 8. CONFETTI FLOWER & HEART EXPLOSION ---
+        const confettiCanvas = document.getElementById('confettiCanvas');
+        const confCtx = confettiCanvas.getContext('2d');
+
+        confettiCanvas.width = window.innerWidth;
+        confettiCanvas.height = window.innerHeight;
+
+        window.addEventListener('resize', () => {
+            confettiCanvas.width = window.innerWidth;
+            confettiCanvas.height = window.innerHeight;
+        });
+
+        let confettiParticles = [];
+
+        class FlowerConfetti {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                const angle = Math.random() * Math.PI * 2;
+                const speed = 4 + Math.random() * 10;
+                this.vx = Math.cos(angle) * speed;
+                this.vy = Math.sin(angle) * speed - 3;
+                this.gravity = 0.15;
+                this.friction = 0.98;
+                this.size = 12 + Math.random() * 14;
+                this.type = Math.random() > 0.4 ? 'flower' : (Math.random() > 0.5 ? 'heart' : 'spark');
+                this.color = ['#f43f5e', '#ec4899', '#fb7185', '#fde047', '#a855f7', '#ffffff'][Math.floor(Math.random() * 6)];
+                this.rotation = Math.random() * Math.PI * 2;
+                this.rotSpeed = (Math.random() - 0.5) * 0.2;
+                this.alpha = 1;
+                this.decay = 0.008 + Math.random() * 0.01;
+            }
+
+            update() {
+                this.vx *= this.friction;
+                this.vy *= this.friction;
+                this.vy += this.gravity;
+                this.x += this.vx;
+                this.y += this.vy;
+                this.rotation += this.rotSpeed;
+                this.alpha -= this.decay;
+            }
+
+            draw() {
+                if (this.alpha <= 0) return;
+                confCtx.save();
+                confCtx.translate(this.x, this.y);
+                confCtx.rotate(this.rotation);
+                confCtx.globalAlpha = this.alpha;
+                confCtx.fillStyle = this.color;
+
+                if (this.type === 'flower') {
+                    // Draw 5 petal flower
+                    for (let i = 0; i < 5; i++) {
+                        confCtx.rotate((Math.PI * 2) / 5);
+                        confCtx.beginPath();
+                        confCtx.arc(0, this.size / 2, this.size / 3, 0, Math.PI * 2);
+                        confCtx.fill();
+                    }
+                    confCtx.fillStyle = '#fde047';
+                    confCtx.beginPath();
+                    confCtx.arc(0, 0, this.size / 4, 0, Math.PI * 2);
+                    confCtx.fill();
+                } else if (this.type === 'heart') {
+                    // Draw heart
+                    confCtx.beginPath();
+                    const topCurveHeight = this.size * 0.3;
+                    confCtx.moveTo(0, topCurveHeight);
+                    confCtx.bezierCurveTo(0, 0, -this.size / 2, 0, -this.size / 2, topCurveHeight);
+                    confCtx.bezierCurveTo(-this.size / 2, (this.size + topCurveHeight) / 2, 0, this.size, 0, this.size);
+                    confCtx.bezierCurveTo(0, this.size, this.size / 2, (this.size + topCurveHeight) / 2, this.size / 2, topCurveHeight);
+                    confCtx.bezierCurveTo(this.size / 2, 0, 0, 0, 0, topCurveHeight);
+                    confCtx.fill();
+                } else {
+                    // Star/spark
+                    confCtx.fillRect(-this.size / 2, -this.size / 2, this.size, this.size);
+                }
+
+                confCtx.restore();
+            }
+        }
+
+        function triggerFlowerExplosion() {
+            const centerX = window.innerWidth / 2;
+            const centerY = window.innerHeight / 2;
+
+            for (let i = 0; i < 90; i++) {
+                confettiParticles.push(new FlowerConfetti(centerX, centerY));
+            }
+        }
+
+        confettiBtn.addEventListener('click', () => {
+            triggerFlowerExplosion();
+            showToast("Tung hoa rực rỡ mừng 20/10! 🌸✨", "fa-wand-magic-sparkles");
+        });
+
+        function animateConfetti() {
+            confCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+
+            confettiParticles.forEach((p, idx) => {
+                p.update();
+                p.draw();
+                if (p.alpha <= 0) {
+                    confettiParticles.splice(idx, 1);
+                }
+            });
+
+            requestAnimationFrame(animateConfetti);
+        }
+        animateConfetti();
+
+    </script>
+</body>
+</html>
